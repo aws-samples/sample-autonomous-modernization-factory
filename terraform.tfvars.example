@@ -1,0 +1,51 @@
+# =============================================================================
+# Example tfvars - copy to terraform.tfvars and customize
+# =============================================================================
+
+aws_region   = "us-east-1"
+environment  = "dev"
+project_name = "mod-factory"
+
+# Bedrock model for agent reasoning
+bedrock_model_id = "anthropic.claude-sonnet-4-20250514-v1:0"
+
+# Closed-loop configuration
+max_retry_attempts  = 3    # Build-fix loops before human escalation
+complexity_threshold = 70   # Score 0-100; above this → human review
+
+# -----------------------------------------------------------------------------
+# Networking (ECS + Fargate + ALB for the web app)
+# -----------------------------------------------------------------------------
+# Two options:
+#
+# Option A - Create a new VPC via the vpc module (set create_vpc = true).
+#   The module provisions public subnets (ALB) + private subnets (Fargate) with
+#   per-AZ NAT egress across the given AZs.
+create_vpc         = true
+vpc_cidr           = "10.0.0.0/16"
+availability_zones = ["us-east-1a", "us-east-1b"]
+
+# Option B - Reuse an existing VPC (set create_vpc = false and supply your own
+#   IDs below). The public subnets host the ALB; the private subnets host Fargate.
+#   existing_vpc_id    = "vpc-xxxxxxxxxxxxxxxxx"
+#   public_subnet_ids  = ["subnet-xxxxxxxxxxxxxxxxx", "subnet-yyyyyyyyyyyyyyyyy"]
+#   private_subnet_ids = ["subnet-aaaaaaaaaaaaaaaaa", "subnet-bbbbbbbbbbbbbbbbb"]
+
+# Legacy CodeBuild VPC vars (leave empty for non-VPC CodeBuild)
+vpc_id     = ""
+subnet_ids = []
+
+# Optional: SNS topic for human-in-the-loop notifications
+sns_escalation_topic_arn = ""
+
+# -----------------------------------------------------------------------------
+# Web app (modernization-web-app)
+# -----------------------------------------------------------------------------
+# Deploy the ECS/Fargate web app (requires Docker where `terraform apply` runs).
+deploy_webapp = false
+image_tag     = "latest"
+
+# CIDRs allowed to reach the web app ALB. Empty restricts to the VPC CIDR
+# (private access only). Set to your own network to reach it from a browser,
+# for example ["203.0.113.4/32"]. Avoid 0.0.0.0/0 outside a throwaway demo.
+allowed_web_cidrs = []

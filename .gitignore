@@ -1,0 +1,49 @@
+# ---- Terraform ----
+.terraform/
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+*.tfplan
+plan.out
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
+
+# Local variable files may contain account-specific values / secrets.
+*.tfvars
+!*.tfvars.example
+
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+env/
+
+# ---- OS / editor ----
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+
+# ---- Build / packaging artifacts ----
+*.zip
+dist/
+build/
+
+# APG article draft - kept local, not published in the sample repo
+ARTICLE.md
+
+# ---- Local IDE / assistant workspace (not published) ----
+.kiro/
+.vscode/
